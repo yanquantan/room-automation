@@ -7,17 +7,19 @@
 
 // PIN USAGE
 // =============
-// D2: isLightOn
-// D3: isAirconOn
-// D4 to D10: LCD Display
+// D2: isLightOn (Trigger)
+// D3: isAirconOn (Echo)
+// D4 to D10: (LCD Display)
+// D11: (PIR Sensor)
 // D12: WiFi RX
 // D13: WiFi TX
 // -------------
 // A0: LCD Shield Buttons
 // A1: Temperature Sensor
-// A3: Servo 9 (Light On)
-// A4: Servo 10 (Light Off)
-// A5: Servo 11 (Aircon Toggle)
+// A2: (LDR?)
+// A3: Light On Servo
+// A4: Light Off Servo
+// A5: Aircon Toggle Servo
 // -------------
 // V0: isLightOn
 // V1: isAirconOn
@@ -106,6 +108,7 @@ BLYNK_WRITE(V11){
 
 //////////////////// Functions Called by Timer Definitions ////////////////////
 void update_server(){
+  aRef_value = 0.0;
   analogReference(INTERNAL);
   analogRead(temp_input_pin);
 
@@ -122,6 +125,7 @@ void update_temp(){
   Blynk.virtualWrite(V1, isAirconOn*255);
   Blynk.virtualWrite(V2, temp_c);
 
+  aRef_value = 0.0;
   analogReference(DEFAULT);
   analogRead(temp_input_pin);
 
