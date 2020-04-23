@@ -25,6 +25,7 @@
 // V9: Light Control (from app / Google Assistant)
 // V11: Aircon Control (from app / Google Assistant)
 
+//////////////////// WiFi Shield Setup ////////////////////
 extern const char auth[];
 extern const char ssid[];
 extern const char pass[];
@@ -36,6 +37,7 @@ SoftwareSerial EspSerial(12, 13); // RX, TX
 
 ESP8266 wifi(&EspSerial);
 
+//////////////////// Pin Definitions ////////////////////
 const int light_status_pin = 2;
 const int aircon_status_pin = 3;
 
@@ -43,79 +45,76 @@ const int temp_input_pin = A1;
 float temp_c;
 float temp_vout;
 
-BlynkTimer update_timer; //used for pushing values to Blynk server
+BlynkTimer timer;
 void update_server();
-long update_period = 10000L; // server is updated every 60s
+long update_period = 10000L; // server is updated every 10s
 
 void update_temp();
+void reset_aRef();
 float aRef_value = 5.0;
 
-Servo servo9, servo10, servo11; // 9: Light on, 10: Light off, 11: Aircon Switch
-BlynkTimer servo_reset_timer;
+Servo lightOn_servo, lightOff_servo, aircon_servo;
 void reset_servos();
 long servo_reset_time = 5000L;
 
 int isLightOn, isAirconOn;
 
-/////////////////////////Things to do when Blynk virtual pins are updated
-BLYNK_CONNECTED() {
+//////////////////// Things to do when Blynk virtual pins are updated ////////////////////
+BLYNK_CONNECTED(){
     Blynk.syncVirtual(V0, V1);
 }
 
-BLYNK_WRITE(V0)
-{
+BLYNK_WRITE(V0){
   isLightOn = param.asInt()/255;
 }
 
-BLYNK_WRITE(V1)
-{
+BLYNK_WRITE(V1){
   isAirconOn = param.asInt()/255;
 }
 
-BLYNK_WRITE(V9)
-{
+BLYNK_WRITE(V9){
   if(param.asInt() == 1){
-    servo9.write(180);
+    lightOn_servo.write(180);
     isLightOn = 1;
     Blynk.virtualWrite(V0, isLightOn*255);
-    servo_reset_timer.setTimeout(servo_reset_time, reset_servos);
+    timer.setTimeout(servo_reset_time, reset_servos);
   }
   
   else if(param.asInt() == 0){
-    servo10.write(180);
+    lightOff_servo.write(180);
     isLightOn = 0;
     Blynk.virtualWrite(V0, isLightOn*255);
-    servo_reset_timer.setTimeout(servo_reset_time, reset_servos);
+    timer.setTimeout(servo_reset_time, reset_servos);
   }
 }
 
-BLYNK_WRITE(V11)
-{
+BLYNK_WRITE(V11){
   if(param.asInt() == 1 && isAirconOn == 0){
-    servo11.write(180);
+    aircon_servo.write(180);
     isAirconOn = 1;
     Blynk.virtualWrite(V1, isAirconOn*255);
-    servo_reset_timer.setTimeout(servo_reset_time, reset_servos);
+    timer.setTimeout(servo_reset_time, reset_servos);
   }
   
   else if(param.asInt() == 0 && isAirconOn == 1){
-    servo11.write(180);
+    aircon_servo.write(180);
     isAirconOn = 0;
     Blynk.virtualWrite(V1, isAirconOn*255);
-    servo_reset_timer.setTimeout(servo_reset_time, reset_servos);
+    timer.setTimeout(servo_reset_time, reset_servos);
   } 
 }
 
-////////////////////////Functions Called by Timer Definitions
+//////////////////// Functions Called by Timer Definitions ////////////////////
 void update_server(){
   analogReference(INTERNAL);
-  aRef_value = 1.1;
   analogRead(temp_input_pin);
 
-  servo_reset_timer.setTimeout(100, update_temp); // using servo_reset_timer to save memory - CHANGE NAME OF TIMER
+  timer.setTimeout(100, update_temp);
 }
 
 void update_temp(){
+  aRef_value = 1.1;
+  
   temp_vout = analogRead(temp_input_pin);
   temp_c = (temp_vout*110)/1023;
   
@@ -124,31 +123,34 @@ void update_temp(){
   Blynk.virtualWrite(V2, temp_c);
 
   analogReference(DEFAULT);
-  aRef_value = 5.0;
   analogRead(temp_input_pin);
+
+  timer.setTimeout(100, reset_aRef);
+}
+
+void reset_aRef(){
+  aRef_value = 5.0;
 }
 
 void reset_servos(){
-  servo9.write(0);
-  servo10.write(0);
-  servo11.write(0);
+  lightOn_servo.write(0);
+  lightOff_servo.write(0);
+  aircon_servo.write(0);
 }
 
-////////////////////////Arduino Setup and Loop
-void setup()
-{
-  // Set ESP8266 baud rate
-  EspSerial.begin(ESP8266_BAUD);
+//////////////////// Arduino Setup and Loop ////////////////////
+void setup(){
+  EspSerial.begin(ESP8266_BAUD); // Set ESP8266 baud rate
   delay(10);
 
   Blynk.begin(auth, wifi, ssid, pass);
 
-  servo9.attach(A3);
-  servo10.attach(A4);
-  servo11.attach(A5);
+  lightOn_servo.attach(A3);
+  lightOff_servo.attach(A4);
+  aircon_servo.attach(A5);
   reset_servos();
 
-  update_timer.setInterval(update_period, update_server);
+  timer.setInterval(update_period, update_server);
 
   pinMode(temp_input_pin, INPUT);
 
@@ -156,11 +158,9 @@ void setup()
   pinMode(aircon_status_pin, OUTPUT);
 }
 
-void loop()
-{
+void loop(){
   Blynk.run();
-  update_timer.run();
-  servo_reset_timer.run();
+  timer.run();
 
   digitalWrite(light_status_pin, isLightOn);
   digitalWrite(aircon_status_pin, isAirconOn);
