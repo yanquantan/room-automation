@@ -83,7 +83,7 @@ BLYNK_WRITE(V9){
   }
   
   else if(param.asInt() == 0){
-    lightOff_servo.write(180);
+    lightOff_servo.write(0);
     isLightOn = 0;
     Blynk.virtualWrite(V0, isLightOn*255);
     timer.setTimeout(servo_reset_time, reset_servos);
@@ -138,7 +138,7 @@ void reset_aRef(){
 
 void reset_servos(){
   lightOn_servo.write(0);
-  lightOff_servo.write(0);
+  lightOff_servo.write(180);
   aircon_servo.write(0);
 }
 
