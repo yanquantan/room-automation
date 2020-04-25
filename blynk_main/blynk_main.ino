@@ -57,7 +57,9 @@ float aRef_value = 5.0;
 
 Servo lightOn_servo, lightOff_servo, aircon_servo;
 void reset_servos();
+void detach_servos();
 long servo_reset_time = 5000L;
+long servo_detach_time = 2000L;
 
 int isLightOn, isAirconOn;
 
@@ -76,14 +78,20 @@ BLYNK_WRITE(V1){
 
 BLYNK_WRITE(V9){
   if(param.asInt() == 1){
+    lightOn_servo.attach(A3);
     lightOn_servo.write(180);
+    timer.setTimeout(servo_detach_time, detach_servos);
+    
     isLightOn = 1;
     Blynk.virtualWrite(V0, isLightOn*255);
     timer.setTimeout(servo_reset_time, reset_servos);
   }
   
   else if(param.asInt() == 0){
+    lightOff_servo.attach(A4);
     lightOff_servo.write(0);
+    timer.setTimeout(servo_detach_time, detach_servos);
+    
     isLightOn = 0;
     Blynk.virtualWrite(V0, isLightOn*255);
     timer.setTimeout(servo_reset_time, reset_servos);
@@ -92,14 +100,20 @@ BLYNK_WRITE(V9){
 
 BLYNK_WRITE(V11){
   if(param.asInt() == 1 && isAirconOn == 0){
+    aircon_servo.attach(A5);
     aircon_servo.write(180);
+    timer.setTimeout(servo_detach_time, detach_servos);
+    
     isAirconOn = 1;
     Blynk.virtualWrite(V1, isAirconOn*255);
     timer.setTimeout(servo_reset_time, reset_servos);
   }
   
   else if(param.asInt() == 0 && isAirconOn == 1){
+    aircon_servo.attach(A5);
     aircon_servo.write(180);
+    timer.setTimeout(servo_detach_time, detach_servos);
+    
     isAirconOn = 0;
     Blynk.virtualWrite(V1, isAirconOn*255);
     timer.setTimeout(servo_reset_time, reset_servos);
@@ -137,9 +151,21 @@ void reset_aRef(){
 }
 
 void reset_servos(){
+  lightOn_servo.attach(A3);
+  lightOff_servo.attach(A4);
+  aircon_servo.attach(A5);
+  
   lightOn_servo.write(0);
   lightOff_servo.write(180);
   aircon_servo.write(0);
+
+  timer.setTimeout(servo_detach_time, detach_servos);
+}
+
+void detach_servos(){
+  lightOn_servo.detach();
+  lightOff_servo.detach();
+  aircon_servo.detach();
 }
 
 //////////////////// Arduino Setup and Loop ////////////////////
@@ -149,9 +175,6 @@ void setup(){
 
   Blynk.begin(auth, wifi, ssid, pass);
 
-  lightOn_servo.attach(A3);
-  lightOff_servo.attach(A4);
-  aircon_servo.attach(A5);
   reset_servos();
 
   timer.setInterval(update_period, update_server);
