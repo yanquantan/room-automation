@@ -1,7 +1,7 @@
 #include <ESP8266_Lib.h>
 #include <BlynkSimpleShieldEsp8266.h>
 #include <Servo.h>
-//#include <LiquidCrystal.h>
+#include <LiquidCrystal.h>
 
 #include "header.h" // imports auth, ssid and pass stored in header.h
 
@@ -9,12 +9,18 @@
 // Digital Pins ================================================================
 const int light_status_pin = 2;         // D2: isLightOn (Trigger)
 const int aircon_status_pin = 3;        // D3: isAirconOn (Echo)
-                                        // D4 to D10: (LCD Display)
+const int LCD_d4 = 4;                   // D4 to D10: LCD Display
+const int LCD_d5 = 5;
+const int LCD_d6 = 6;
+const int LCD_d7 = 7;
+const int LCD_RS = 8;
+const int LCD_EN = 9;
+const int LCD_BL = 10;
                                         // D11: (PIR Sensor)
 const int RX_pin = 12;                  // D12: WiFi RX
 const int TX_pin = 13;                  // D13: WiFi TX
 // Analog Pins -----------------------------------------------------------------
-                                        // A0: (LCD Shield Buttons)
+const int LCD_button_pin = A0;          // A0: LCD Shield Buttons
 const int temp_sensor_pin = A1;         // A1: Temperature Sensor
                                         // A2: (LDR?)
 const int lightOn_servo_pin = A3;       // A3: Light On Servo
@@ -38,6 +44,34 @@ SoftwareSerial EspSerial(RX_pin, TX_pin); // RX, TX
 #define ESP8266_BAUD 9600
 
 ESP8266 wifi(&EspSerial);
+
+//////////////////// LCD Shield Setup ////////////////////
+LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_d4, LCD_d5, LCD_d6, LCD_d7);
+
+int lcd_key     = 0;
+int adc_key_in  = 0;
+#define btnRIGHT  0
+#define btnUP     1
+#define btnDOWN   2
+#define btnLEFT   3
+#define btnSELECT 4
+#define btnNONE   5
+
+int read_LCD_buttons()
+{
+ adc_key_in = analogRead(0);      // read the value from the sensor
+ // my buttons when read are centered at these valies: 0, 144, 329, 504, 741
+ // we add approx 50 to those values and check to see if we are close
+ if (adc_key_in > 1000) return btnNONE; // We make this the 1st option for speed reasons since it will be the most likely result
+ // For V1.1 us this threshold
+ if (adc_key_in < 50)   return btnRIGHT;
+ if (adc_key_in < 250)  return btnUP;
+ if (adc_key_in < 450)  return btnDOWN;
+ if (adc_key_in < 650)  return btnLEFT;
+ if (adc_key_in < 850)  return btnSELECT;
+ 
+ return btnNONE;  // when all others fail, return this...
+}
 
 //////////////////// Variable Definitions ////////////////////
 BlynkTimer timer;
@@ -212,6 +246,17 @@ void setup(){
   EspSerial.begin(ESP8266_BAUD); // Set ESP8266 baud rate
   delay(10);
 
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
+  lcd.print("L: ");
+  lcd.setCursor(8, 0);
+  lcd.print("AC: ");
+  lcd.setCursor(0, 1);
+  lcd.print("Temp: ");
+  lcd.setCursor(10, 1);
+  lcd.print((char)223);
+  lcd.print("C");
+
   Blynk.begin(auth, wifi, ssid, pass);
 
   reset_servos();
@@ -227,6 +272,28 @@ void setup(){
 void loop(){
   Blynk.run();
   timer.run();
+
+  lcd.setCursor(3, 0);
+  if (isLightOn == 0){
+    lcd.print("Off");
+  }
+  else if (isLightOn == 1){
+    lcd.print("On ");
+  }
+  
+  lcd.setCursor(12, 0);
+  if (isAirconOn == 0){
+    lcd.print("Off");
+  }
+  else if (isAirconOn == 1){
+    lcd.print("On ");
+  }
+  
+  lcd.setCursor(6, 1);
+  lcd.print(temp_c);
+  lcd.setCursor(10, 1);
+  lcd.print((char)223);
+  lcd.print("C    ");
 
   digitalWrite(light_status_pin, isLightOn);
   digitalWrite(aircon_status_pin, isAirconOn);
