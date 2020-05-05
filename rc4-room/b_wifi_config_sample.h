@@ -1,6 +1,6 @@
-const char auth[] = "..."; // get this from your Blynk app
-const char ssid[] = "..."; // this is the name of your WiFi network
-const char pass[] = "..."; // this is the WiFi password
+const char auth[] = "YourAuthTokenHere"; // get this from your Blynk app
+const char ssid[] = "YourWiFiSSIDHere"; // this is the name of your WiFi network
+const char pass[] = "YourWiFiPasswordHere"; // this is the WiFi password
 
 #include <SoftwareSerial.h>
 SoftwareSerial EspSerial(RX_pin, TX_pin); // RX, TX
