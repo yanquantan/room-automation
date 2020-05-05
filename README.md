@@ -10,8 +10,8 @@ This version is developed for use in RC4 rooms, and is able to control (via Blyn
 
 Version 1.0 _optional_ features include:
 * LCD display showing:
- * Light and aircon status (on / off)
- * Temperature reading
+  * Light and aircon status (on / off)
+  * Temperature reading
 * Analog temperature sensor (up to 0.1 deg C precision)
 
 Version 1.0 limitations:
@@ -25,24 +25,24 @@ This project will require the following hardware (which can be purchased from [s
 * [LM35 Analog Temperature Sensor](https://sg.cytron.io/p-lm35-analog-temperature-sensor-module) (optional)
 * [Micro Servo (180 deg)](https://sg.cytron.io/p-towerpro-sg90-micro-servo) x 3
 * Miscellanous Items
- * [Small Breadboard](https://sg.cytron.io/p-breadboard-8.5x5.5cm-400-holes)
- * [Jumper Wires](https://sg.cytron.io/p-male-to-male-jumper-wire)
- * [Battery Holder](https://sg.cytron.io/p-4xaaa-battery-holder)
- * AAA Batteries x 4 (or AA Batteries)
- * MicroUSB Cable
- * Powerbank (at least 10,000 mAh recommended) OR nearby USB power supply
- * 3M Command Refill Strips (Mini) x 3
+  * [Small Breadboard](https://sg.cytron.io/p-breadboard-8.5x5.5cm-400-holes)
+  * [Jumper Wires](https://sg.cytron.io/p-male-to-male-jumper-wire)
+  * [Battery Holder](https://sg.cytron.io/p-4xaaa-battery-holder)
+  * AAA Batteries x 4 (or AA Batteries)
+  * MicroUSB Cable
+  * Powerbank (at least 10,000 mAh recommended) OR nearby USB power supply
+  * 3M Command Refill Strips (Mini) x 3
 * Optional Items
- * [Acrylic Base Plate](https://sg.cytron.io/p-acrylic-base-plate-for-arduino-uno)
- * [Breadboard Jumper Wire Kit](https://sg.cytron.io/p-breadboard-jumper-wire-kit-140pcs)
+  * [Acrylic Base Plate](https://sg.cytron.io/p-acrylic-base-plate-for-arduino-uno)
+  * [Breadboard Jumper Wire Kit](https://sg.cytron.io/p-breadboard-jumper-wire-kit-140pcs)
 
 ### Software Requirements
 You will need to install the following software:
 * On your computer: [Arduino IDE](https://www.arduino.cc/en/main/software) with the following libraries:
- * [LiquidCrystal Library](https://www.arduino.cc/en/Reference/LiquidCrystal)
- * [Servo Library](https://www.arduino.cc/en/Reference/Servo)
- * [ESP8266 Library](https://github.com/vshymanskyy/BlynkESP8266)
- * [Blynk Library](http://help.blynk.cc/en/articles/512105-how-to-install-blynk-library-for-arduino-ide)
+  * [LiquidCrystal Library](https://www.arduino.cc/en/Reference/LiquidCrystal)
+  * [Servo Library](https://www.arduino.cc/en/Reference/Servo)
+  * [ESP8266 Library](https://github.com/vshymanskyy/BlynkESP8266)
+  * [Blynk Library](http://help.blynk.cc/en/articles/512105-how-to-install-blynk-library-for-arduino-ide)
 * On your phone: [Blynk](https://blynk.io/en/getting-started)
 
 ## Quick Start
