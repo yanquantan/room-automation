@@ -8,8 +8,9 @@
 #include "a_pin_usage.h"
 #include "b_wifi_config.h" // remember to change this file
 #include "c_lcd_config.h"
-#include "d_global_variables.h"
-#include "e_function_prototypes.h"
+#include "d_temperature_config.h"
+#include "e_global_variables.h"
+#include "f_function_prototypes.h"
 
 /*
  * Blink Commands Below

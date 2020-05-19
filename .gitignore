@@ -4,3 +4,5 @@ blynk_main/header.h
 rc4-room/b_wifi_config.h
 
 my-bedroom/b_wifi_config.h
+
+*.hex
