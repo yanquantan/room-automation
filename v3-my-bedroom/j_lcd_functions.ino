@@ -1,31 +1,31 @@
 void display_status(){
   lcd.setCursor(0, 0);
-  lcd.print("LA: ");
+  lcd.print(F("LA: "));
   
   if (isLightAOn == 0){
-    lcd.print("Off ");
+    lcd.print(F("Off "));
   }
   else if (isLightAOn == 1){
-    lcd.print("On  ");
+    lcd.print(F("On  "));
   }
   
   lcd.setCursor(8, 0);
-  lcd.print("LB: ");
+  lcd.print(F("LB: "));
   
   if (isLightBOn == 0){
-    lcd.print("Off ");
+    lcd.print(F("Off "));
   }
   else if (isLightBOn == 1){
-    lcd.print("On  ");
+    lcd.print(F("On  "));
   }
 
   lcd.setCursor(0, 1);
-  lcd.print("Temp: ");
+  lcd.print(F("Temp: "));
   
   lcd.setCursor(6, 1);
   lcd.print(temp_c);
   
   lcd.setCursor(10, 1);
   lcd.print((char)223);
-  lcd.print("C    ");
+  lcd.print(F("C    "));
 }

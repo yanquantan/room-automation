@@ -11,3 +11,6 @@ void attach_servos();
 void detach_servos();
 
 void update_temp();
+
+void writeStringToEEPROM(int addr, String myStr);
+String readStringFromEEPROM(int addr);
