@@ -4,6 +4,7 @@
 #include <LiquidCrystal.h>
 #include <OneWire.h> 
 #include <DallasTemperature.h>
+#include <EEPROM.h>
 
 #include "a_pin_usage.h"
 #include "b_wifi_config.h" // remember to change this file
