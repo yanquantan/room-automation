@@ -47,8 +47,6 @@ void setup(){
     reset_servos();
   
     timer.setInterval(update_period, update_server);
-  
-    pinMode(relay_pin, OUTPUT);
   }
 
   if (connectedToSerialMonitor == 1){

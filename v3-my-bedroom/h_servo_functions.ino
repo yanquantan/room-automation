@@ -1,5 +1,4 @@
 void switch_on_light_A(){
-  digitalWrite(relay_pin, HIGH);
   lightAOn_servo.attach(lightAOn_servo_pin);
   lightAOn_servo.write(0);
   timer.setTimeout(servo_detach_time, detach_servos);
@@ -10,7 +9,6 @@ void switch_on_light_A(){
 };
 
 void switch_off_light_A(){
-  digitalWrite(relay_pin, HIGH);
   lightAOff_servo.attach(lightAOff_servo_pin);
   lightAOff_servo.write(180);
   timer.setTimeout(servo_detach_time, detach_servos);
@@ -21,7 +19,6 @@ void switch_off_light_A(){
 };
 
 void switch_on_light_B(){
-  digitalWrite(relay_pin, HIGH);
   lightBOn_servo.attach(lightBOn_servo_pin);
   lightBOn_servo.write(180);
   timer.setTimeout(servo_detach_time, detach_servos);
@@ -32,7 +29,6 @@ void switch_on_light_B(){
 };
 
 void switch_off_light_B(){
-  digitalWrite(relay_pin, HIGH);
   lightBOff_servo.attach(lightBOff_servo_pin);
   lightBOff_servo.write(0);
   timer.setTimeout(servo_detach_time, detach_servos);
@@ -54,7 +50,6 @@ void reset_servos(){
 }
 
 void attach_servos(){
-  digitalWrite(relay_pin, HIGH);
   lightAOn_servo.attach(lightAOn_servo_pin);
   lightBOn_servo.attach(lightBOn_servo_pin);
   lightAOff_servo.attach(lightAOff_servo_pin);
@@ -66,5 +61,4 @@ void detach_servos(){
   lightBOn_servo.detach();
   lightAOff_servo.detach();
   lightBOff_servo.detach();
-  digitalWrite(relay_pin, LOW);
 }

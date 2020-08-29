@@ -48,7 +48,7 @@ You will need to install the following software:
 ## Quick Start
 1. Create an account with Blynk, sign in and scan the QR code below using your phone:
 
-![](/rc4-room/resources/blynk_QR.jpg)
+![](/v1-rc4-room/resources/blynk_QR.jpg)
 
 2. Press the settings logo (the hexagon), copy the Auth Token onto your clipboard, and send it to yourself
 
@@ -71,7 +71,7 @@ You will need to install the following software:
  * Ensure that the mini-jumpers on the WiFi shield are placed at D13 and D12
  * If required, turn off the Buzzer by shifting the switch on the Maker UNO
 
-![](/rc4-room/resources/v1_1.jpg)
+![](/v1-rc4-room/resources/v1_1.jpg)
 
 6. Power on your Maker UNO using your Powerbank / USB power supply
 

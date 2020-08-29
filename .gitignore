@@ -1,3 +1,9 @@
 
 *.hex
 v2-my-bedroom/b_wifi_config.h
+
+v4-esp32/b_wifi_config.h
+
+v5-esp32-rc4-blynk/b_blynk_config.h
+
+v4-esp32/c_mqtt_config.h
